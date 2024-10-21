@@ -249,6 +249,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   sprintSpeed: 6
+  crouchspeed: 1.5
+  crouchHeight: 0.5
+  standingHeight: 2
+  timeToCrouch: 0.25
+  crouchingCenter: {x: 0, y: 0.5, z: 0}
+  standingCenter: {x: 0, y: 0, z: 0}
   jumpForce: 8
   gravity: 25
   lookSpeedX: 5
@@ -257,8 +263,10 @@ MonoBehaviour:
   lowerLookLimit: 80
   canSprint: 1
   canJump: 1
+  canCrouch: 1
   sprintKey: 304
   jumpKey: 32
+  crouchKey: 306
 --- !u!143 &765693540
 CharacterController:
   m_ObjectHideFlags: 0
