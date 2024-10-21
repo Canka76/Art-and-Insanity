@@ -6,9 +6,18 @@ public class FpsController : MonoBehaviour
 {
     public bool CanMove { get; private set; } = true;
 
+    private bool canSprinting => canSprint && Input.GetKey(sprintKey);
+    private bool ShouldJump => Input.GetKeyDown(jumpKey) && _characterController.isGrounded; 
+    
+
     [Header("Movement Parameters")] 
-    [SerializeField] private float gravity = 30f;
     [SerializeField] float moveSpeed = 3f;
+    [SerializeField] float sprintSpeed = 6f;
+   
+
+    [Header("Jumping Parameters")] 
+    [SerializeField] private float jumpForce = 8f;
+    [SerializeField] private float gravity = 30f;
 
     [Header("Look Parameters")] 
     [SerializeField, Range(1, 10)] private float lookSpeedX = 5f;
@@ -16,12 +25,20 @@ public class FpsController : MonoBehaviour
     [SerializeField, Range(1, 100)] private float upperLookLimit = 80f;
     [SerializeField, Range(1, 100)] private float lowerLookLimit = 80f;
 
+    [Header("Functional Options")] 
+    [SerializeField] private bool canSprint = true;
+    [SerializeField] private bool canJump = true;
+
+    [Header("Controls")] 
+    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+    
     private Camera playerCamera;
     private CharacterController _characterController;
     private Vector3 moveDirections;
     private Vector2 currentInput;
 
-    private float rotationX = 0f;
+   private float rotationX = 0f;
     void Awake()
     {
         playerCamera = GetComponentInChildren<Camera>();
@@ -39,14 +56,20 @@ public class FpsController : MonoBehaviour
         {
             HandleMovementInput();
             HandleMouseLock();
+
+            if (canJump)
+            {
+                HandleJump();
+            }
+
             
             ApplyFinalMovement();
         }
     }
 
-    void HandleMovementInput()
+    void HandleMovementInput() 
     {
-        currentInput = new Vector2(moveSpeed * Input.GetAxis("Vertical"), moveSpeed * Input.GetAxis("Horizontal"));
+        currentInput = new Vector2((canSprinting ? sprintSpeed : moveSpeed) * Input.GetAxis("Vertical"), (canSprinting ? sprintSpeed : moveSpeed) * Input.GetAxis("Horizontal"));
         float moveDirectionY = moveDirections.y;
 
         moveDirections = (transform.TransformDirection(Vector3.forward) * currentInput.x) + (transform.TransformDirection(Vector3.right)* currentInput.y);
@@ -69,6 +92,13 @@ public class FpsController : MonoBehaviour
         }
 
         _characterController.Move(moveDirections * Time.deltaTime);
+    }
 
+    void HandleJump()
+    {
+        if (ShouldJump)
+        {
+            moveDirections.y = jumpForce;
+        }
     }
 }
