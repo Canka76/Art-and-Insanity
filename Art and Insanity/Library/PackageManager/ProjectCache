@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638650553891604667
-    m_Hash: 966462131
+      ticks: 638655737309796049
+    m_Hash: 2792176889
   m_LockFileStatus:
     m_FilePath: C:/Unity/Git Repos/Art-and-Insanity/Art and Insanity/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638650553891678856
-    m_Hash: 4260635170
+      ticks: 638655737309806064
+    m_Hash: 3593778981
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -2852,10 +2852,12 @@ m_ResolvedPackages:
     - 3.0.27
     - 3.0.28
     - 3.0.31
+    - 3.0.34
     compatible:
     - 3.0.28
     - 3.0.31
-    recommended: 3.0.31
+    - 3.0.34
+    recommended: 3.0.34
     deprecated: []
   dependencies:
   - name: com.unity.ext.nunit

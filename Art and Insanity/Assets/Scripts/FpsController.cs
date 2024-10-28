@@ -19,6 +19,7 @@ public class FpsController : MonoBehaviour
     [SerializeField] float moveSpeed = 3f;
     [SerializeField] float sprintSpeed = 6f;
     [SerializeField] float crouchspeed = 1.5f;
+    [SerializeField] float slopeSpeed = 8f;
 
     [Header("Crouch Parameters")] 
     [SerializeField] private float crouchHeight = 0.5f;
@@ -55,6 +56,7 @@ public class FpsController : MonoBehaviour
     [SerializeField] private bool canJump = true;
     [SerializeField] private bool canCrouch = true;
     [SerializeField] private bool canHeadBob = true;
+    [SerializeField] private bool willSlideOnSlopes = true;
 
 
     [Header("Controls")] 
@@ -67,7 +69,26 @@ public class FpsController : MonoBehaviour
     private Vector3 moveDirections;
     private Vector2 currentInput;
 
-   private float rotationX = 0f;
+     private float rotationX = 0f;
+     
+     // Slope Sliding Parameters
+     private Vector3 hitPointNormal;
+
+     private bool isSliding
+     {
+         get
+         {
+             if (_characterController.isGrounded && Physics.Raycast(transform.position, Vector3.down,out RaycastHit slopeHit, 1.5f))
+             {
+                 hitPointNormal = slopeHit.normal;
+                 return Vector3.Angle(hitPointNormal, Vector3.up) > _characterController.slopeLimit;
+             }
+             else
+             {
+                 return false;
+             }
+         }
+     }
     void Awake()
     {
         playerCamera = GetComponentInChildren<Camera>();
@@ -130,6 +151,10 @@ public class FpsController : MonoBehaviour
             moveDirections.y -= gravity * Time.deltaTime;
         }
 
+        if (willSlideOnSlopes && isSliding)
+        {
+            moveDirections += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
+        }
         _characterController.Move(moveDirections * Time.deltaTime);
     }
 
